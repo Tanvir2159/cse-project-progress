@@ -1,0 +1,8 @@
+# macOS executable
+gamehub
+
+# Object files
+*.o
+
+# OS metadata
+.DS_Store

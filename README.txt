@@ -12,13 +12,18 @@ STUB
 NOT IN THIS BUILD
   golf, snake, ludo
 
-BUILD
-  make project
-  make run
+BUILD & RUN
+  Windows:  run          (or build.bat / make run)
+  macOS:    ./run        (or make run)
+  Linux:    ./run        (or make LINUX=1)
 
 BUILD (manual Windows + raylib win64)
   gcc -Wall -Wextra -std=c99 -Iinclude -I"include/raylib-6.0_win64_mingw-w64/include" -L"include/raylib-6.0_win64_mingw-w64/lib" -o gamehub.exe src/main.c src/util.c src/g_candy.c -lraylib -lopengl32 -lgdi32 -lwinmm
   .\gamehub.exe
+
+BUILD (manual macOS + raylib)
+  gcc -Wall -Wextra -std=c99 -Iinclude -I/opt/homebrew/include -L/opt/homebrew/lib -o gamehub src/main.c src/util.c src/g_candy.c -lraylib -framework OpenGL -framework Cocoa -framework IOKit -framework CoreVideo
+  ./gamehub
 
 DEMO FLOW
   1. register or login

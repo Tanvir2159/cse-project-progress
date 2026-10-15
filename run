@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+set -e
+
+# Change directory to the folder containing this script
+cd "$(dirname "$0")"
+
+OS="$(uname -s 2>/dev/null || echo Unknown)"
+
+if [ "$OS" = "Darwin" ]; then
+    # macOS
+    if [ ! -f "./gamehub" ] || [ "src/main.c" -nt "./gamehub" ] || [ "src/util.c" -nt "./gamehub" ] || [ "src/g_candy.c" -nt "./gamehub" ]; then
+        echo "Building gamehub for macOS..."
+        make project
+    fi
+    exec ./gamehub "$@"
+elif [ "$OS" = "Linux" ]; then
+    # Linux
+    if [ ! -f "./gamehub" ] || [ "src/main.c" -nt "./gamehub" ] || [ "src/util.c" -nt "./gamehub" ] || [ "src/g_candy.c" -nt "./gamehub" ]; then
+        echo "Building gamehub for Linux..."
+        make project
+    fi
+    exec ./gamehub "$@"
+else
+    # Windows / MSYS / Git Bash
+    if [ ! -f "./gamehub.exe" ]; then
+        make project
+    fi
+    exec ./gamehub.exe "$@"
+fi
