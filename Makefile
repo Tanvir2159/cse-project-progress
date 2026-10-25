@@ -1,34 +1,24 @@
-# GAME HUB — progress build
-# Sir runs:  make project
-#
-# Other targets:
-#   make          same as make project (build only)
-#   make run      build then run
-#   make clean    remove executable
-#   make LINUX=1  build on Linux with system raylib
+# GAME HUB — CSE 1102
+# make project   OR   mingw32-make project
 
 CC      = gcc
 CFLAGS  = -Wall -Wextra -std=c99 -Iinclude
-SRC     = src/main.c src/util.c src/g_candy.c
+SRC     = src/main.c src/util.c src/gfx.c src/auth.c src/leaderboard.c src/rating.c \
+          src/g_snake.c src/g_candy.c src/g_golf.c src/g_parkour.c
 
-UNAME_S := $(shell uname -s 2>/dev/null || echo Unknown)
-
-ifeq ($(LINUX),1)
-  LDFLAGS = -lraylib -lm -lpthread -ldl
-  TARGET  = gamehub
-else ifeq ($(UNAME_S),Darwin)
-  CFLAGS += -I/opt/homebrew/include -I/usr/local/include
-  LDFLAGS = -L/opt/homebrew/lib -L/usr/local/lib -lraylib -framework OpenGL -framework Cocoa -framework IOKit -framework CoreVideo
-  TARGET  = gamehub
-else ifeq ($(UNAME_S),Linux)
-  LDFLAGS = -lraylib -lm -lpthread -ldl
-  TARGET  = gamehub
-else
-  RAYINC  = include/raylib-6.0_win64_mingw-w64/include
-  RAYLIB  = include/raylib-6.0_win64_mingw-w64/lib
-  CFLAGS += -I"$(RAYINC)"
-  LDFLAGS = -L"$(RAYLIB)" -lraylib -lopengl32 -lgdi32 -lwinmm
+ifeq ($(OS),Windows_NT)
+  RAY     = include/raylib-6.0_win64_mingw-w64
+  CFLAGS += -I"$(RAY)/include"
+  LDFLAGS = -L"$(RAY)/lib" -lraylib -lopengl32 -lgdi32 -lwinmm
   TARGET  = gamehub.exe
+else
+  UNAME_S := $(shell uname -s)
+  ifeq ($(UNAME_S),Darwin)
+    LDFLAGS = -lraylib -framework OpenGL -framework Cocoa -framework IOKit -framework CoreVideo
+  else
+    LDFLAGS = -lraylib -lm -lpthread -ldl
+  endif
+  TARGET = gamehub
 endif
 
 .PHONY: all project run clean
@@ -45,4 +35,4 @@ run: project
 	./$(TARGET)
 
 clean:
-	rm -f $(TARGET)
+	rm -f gamehub gamehub.exe

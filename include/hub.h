@@ -9,13 +9,14 @@
 #include <time.h>
 #include <math.h>
 
+/* ---------- macros ---------- */
 #define SW              1000
 #define SH              650
 #define MAX_NAME        32
-#define MAX_PASS        32
-#define USERS_FILE      "data/users.txt"
-#define RATINGS_FILE    "data/ratings.txt"
-#define SETTINGS_FILE   "data/settings.txt"
+#define SCORE_FILE      "data/scores.txt"
+#define RATING_FILE     "data/ratings.txt"
+#define ARRAY_LEN(a)    ((int)(sizeof(a)/sizeof((a)[0])))
+#define CLAMP(x,a,b)    ((x)<(a)?(a):((x)>(b)?(b):(x)))
 
 #ifdef _WIN32
   #define CLEAR_CMD "cls"
@@ -23,67 +24,71 @@
   #define CLEAR_CMD "clear"
 #endif
 
-/* ANSI (long names — avoid clash with raylib / Windows) */
-#define ANSI_RST  "\033[0m"
-#define ANSI_B    "\033[1m"
-#define ANSI_C    "\033[1;36m"
-#define ANSI_Y    "\033[1;33m"
-#define ANSI_G    "\033[1;32m"
-#define ANSI_M    "\033[1;35m"
-#define ANSI_RD   "\033[1;31m"
-#define ANSI_BL   "\033[1;34m"
-#define ANSI_DIM  "\033[2m"
-#define ANSI_BG_BLK "\033[40m"
-#define ANSI_BG_RED "\033[41m"
-#define ANSI_BG_GRN "\033[42m"
-#define ANSI_BG_YEL "\033[43m"
-#define ANSI_BG_BLU "\033[44m"
-#define ANSI_BG_MAG "\033[45m"
-#define ANSI_BG_CYN "\033[46m"
-#define ANSI_BG_WHT "\033[47m"
-#define ANSI_FG_BLK "\033[30m"
-#define ANSI_FG_WHT "\033[97m"
-
+/* ---------- structs / union (course topics) ---------- */
 typedef struct {
     char name[MAX_NAME];
-    char pass[MAX_PASS];
-} User;
+    int  theme;         /* 0 cyan 1 magenta 2 green */
+    int  candy_colors;  /* 3..6 */
+    int  wins[4];          /* snake, candy, golf, parkour */
+    int  best_golf;        /* fewer strokes = better */
+    int  best_candy;
+    int  best_snake;
+    int  best_parkour;
+} Player;
 
-/* progress build: fields kept for later; settings menu is a stub */
-typedef struct {
-    int display_mode;   /* 0 graphics, 1 terminal */
-    int difficulty;     /* 1 easy 2 normal 3 hard */
-    int theme;          /* 0 cyan 1 magenta 2 green */
-    int two_player;
-    int candy_colors;
-    int candy_rows;
-    int candy_cols;
-    int candy_moves;
-} Settings;
+/* union: same memory as int or as 4 chars (demo for viva) */
+typedef union {
+    int   as_int;
+    char  as_bytes[4];
+} IntBytes;
 
-typedef struct {
-    User     user;
-    Settings settings;
-} Session;
+typedef enum {
+    G_SNAKE = 0,
+    G_CANDY,
+    G_GOLF,
+    G_PARKOUR,
+    G_COUNT
+} GameId;
 
 void enable_console(void);
-void clear_screen(void);
-int  login_or_register(User *u);
-void load_settings(Settings *s);
-void save_settings(const Settings *s);
-void open_settings_menu(Settings *s);
-void ask_and_save_rating(const char *username, const char *game);
-float average_rating(const char *game);
-void show_status(const Session *s);
-void print_banner(const Session *s);
-void print_help(void);
-void print_ls(void);
-const char *diff_name(int d);
-const char *mode_name(int m);
-const char *theme_name(int t);
-const char *accent(const Settings *s);
-void term_title_candy(void);
+void shell_banner(const Player *p);
+void shell_help(void);
+void shell_settings(Player *p);
+void score_load(Player *p, const char *name);
+void score_save(const Player *p);
 
-void game_candy(Session *s);
+void game_snake(Player *p);
+void game_candy(Player *p);
+void game_golf(Player *p);
+void game_parkour(Player *p);
+
+void gfx_open(const char *title);
+void gfx_background(Color top, Color bottom);
+void gfx_text_shadow(const char *t, int x, int y, int size, Color c);
+void gfx_text_center(const char *t, int cx, int y, int size, Color c);
+void gfx_topbar(const char *title, const char *hint);
+void gfx_panel(Rectangle r, Color c);
+void fx_burst(float x, float y, Color c, int n);
+void fx_update_draw(void);
+
+#define LB_GAME 16
+#define LB_NAME 24
+typedef struct { char game[LB_GAME]; char name[LB_NAME]; int score; } LbRow;
+
+int  lb_top(const char *game, int low_is_better, LbRow *out, int max);
+void lb_submit(const char *game, const char *name, int score, int low_is_better);
+void lb_add(const char *game, const char *name, int delta);
+void lb_overlay(const char *game, int low_is_better, const char *me);
+void lb_print_all(void);
+
+int auth_login(char *name_out, int size);
+int auth_change_password(const char *name);
+
+int gfx_pick_players(const char *game, const char *p1keys, const char *p2keys);
+
+/* game ratings 1–5 */
+void rating_ask_and_save(const char *user, const char *game);
+float rating_average(const char *game);          /* -1 if no ratings yet */
+void rating_print_averages(void);
 
 #endif

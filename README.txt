@@ -1,33 +1,21 @@
-GAME HUB — progress build (for demo)
+GAME HUB — simplified games (still matches report structure)
 
-WHAT WORKS
-  login / register
-  shell: help, ls, status, clear/neofetch, exit
-  candy (graphics + terminal mode if display_mode set in file)
-  rating after candy
+GAMES
+  snake    grid, eat food, 1 player
+  candy    match-3, no burst particles
+  golf     3 holes only (not 8)
+  parkour  jump runner, simple obstacles
 
-STUB
-  settings  — lists planned options, not editable yet
+SHELL (unchanged)
+  login → name@hub:~$ → type snake|candy|golf|parkour
+  ratings after each game, leaderboard, passwd, union
 
-NOT IN THIS BUILD
-  golf, snake, ludo
+BUILD
+  Put raylib under include/raylib-6.0_win64_mingw-w64/
+  mingw32-make project
+  OR build.bat
+  OR open GAMEHUB.cbp in Code::Blocks
 
-BUILD & RUN
-  Windows:  run          (or build.bat / make run)
-  macOS:    ./run        (or make run)
-  Linux:    ./run        (or make LINUX=1)
-
-BUILD (manual Windows + raylib win64)
-  gcc -Wall -Wextra -std=c99 -Iinclude -I"include/raylib-6.0_win64_mingw-w64/include" -L"include/raylib-6.0_win64_mingw-w64/lib" -o gamehub.exe src/main.c src/util.c src/g_candy.c -lraylib -lopengl32 -lgdi32 -lwinmm
-  .\gamehub.exe
-
-BUILD (manual macOS + raylib)
-  gcc -Wall -Wextra -std=c99 -Iinclude -I/opt/homebrew/include -L/opt/homebrew/lib -o gamehub src/main.c src/util.c src/g_candy.c -lraylib -framework OpenGL -framework Cocoa -framework IOKit -framework CoreVideo
-  ./gamehub
-
-DEMO FLOW
-  1. register or login
-  2. help / ls / neofetch
-  3. candy
-  4. settings (show stub)
-  5. exit
+WHY SIMPLER GAMES
+  Same multi-file design, auth, scores, ratings.
+  Game files are short so you can read and explain every line.
