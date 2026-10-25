@@ -5,12 +5,6 @@ gamehub.exe
 *.obj
 *.d
 
-# Local runtime data
-data/users.txt
-data/scores.txt
-data/leaderboard.txt
-data/ratings.txt
-
 # IDE and editor metadata
 .vscode/
 .idea/
