@@ -1,5 +1,5 @@
 # GAME HUB — CSE 1102
-# make project   OR   mingw32-make project
+# make   OR   mingw32-make
 
 CC      = gcc
 CFLAGS  = -Wall -Wextra -std=c99 -Iinclude
