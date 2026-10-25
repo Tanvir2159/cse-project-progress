@@ -1,8 +1,21 @@
-# macOS executable
+# Build outputs
 gamehub
-
-# Object files
+gamehub.exe
 *.o
+*.obj
+*.d
+
+# Local runtime data
+data/users.txt
+data/settings.txt
+data/scores.txt
+data/leaderboard.txt
+data/ratings.txt
+
+# IDE and editor metadata
+.vscode/
+.idea/
+*.swp
 
 # OS metadata
 .DS_Store
