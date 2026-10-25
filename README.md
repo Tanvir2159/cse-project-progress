@@ -34,11 +34,18 @@ C99 terminal shell (`hub-sh`) featuring raylib mini-games, user authentication, 
 - macOS: `brew install raylib`
 - Debian/Ubuntu: `sudo apt install libraylib-dev`
 
+**Build:**
+```bash
+make
+```
+*(or primitive `gcc` command on macOS)*:
+```bash
+gcc -Wall -Wextra -std=c99 -Iinclude -I/opt/homebrew/include -L/opt/homebrew/lib -o gamehub src/*.c -lraylib -framework OpenGL -framework Cocoa -framework IOKit -framework CoreVideo
+```
+
 **Run:**
 ```bash
-./run
-# or
-make run
+./gamehub
 ```
 
 ### Windows
@@ -48,11 +55,13 @@ make run
 
 **Command Line:**
 ```cmd
-run
-:: or
-build.bat
-:: or
-mingw32-make run
+mingw32-make
+gamehub.exe
+```
+*(or primitive `gcc` command)*:
+```cmd
+gcc -Wall -Wextra -std=c99 -Iinclude -I"include/raylib-6.0_win64_mingw-w64/include" -L"include/raylib-6.0_win64_mingw-w64/lib" -o gamehub.exe src/*.c -lraylib -lopengl32 -lgdi32 -lwinmm
+gamehub.exe
 ```
 
 **Code::Blocks:**
@@ -79,8 +88,5 @@ mingw32-make run
 │   ├── rating.c                          # Post-game rating prompt and calculation
 │   └── util.c                            # Score loading, session settings, and banner
 ├── GAMEHUB.cbp                           # Code::Blocks project configuration
-├── Makefile                              # Cross-platform build configuration
-├── build.bat                             # Windows MinGW build script
-├── run                                   # macOS/Linux launcher
-└── run.bat                               # Windows launcher
+└── Makefile                              # Standard C99 build configuration
 ```

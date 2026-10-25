@@ -22,18 +22,12 @@ else
   TARGET = gamehub
 endif
 
-.PHONY: all project run clean
+.PHONY: all clean
 
-all: project
-
-project: $(TARGET)
-	@echo Build complete: $(TARGET)
+all: $(TARGET)
 
 $(TARGET): $(SRC) include/hub.h
 	$(CC) $(CFLAGS) -o $(TARGET) $(SRC) $(LDFLAGS)
-
-run: project
-	./$(TARGET)
 
 clean:
 	rm -f gamehub gamehub.exe
