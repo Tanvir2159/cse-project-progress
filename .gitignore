@@ -7,7 +7,6 @@ gamehub.exe
 
 # Local runtime data
 data/users.txt
-data/settings.txt
 data/scores.txt
 data/leaderboard.txt
 data/ratings.txt

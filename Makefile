@@ -14,7 +14,8 @@ ifeq ($(OS),Windows_NT)
 else
   UNAME_S := $(shell uname -s)
   ifeq ($(UNAME_S),Darwin)
-    LDFLAGS = -lraylib -framework OpenGL -framework Cocoa -framework IOKit -framework CoreVideo
+    CFLAGS  += -I/opt/homebrew/include -I/usr/local/include
+    LDFLAGS  = -L/opt/homebrew/lib -L/usr/local/lib -lraylib -framework OpenGL -framework Cocoa -framework IOKit -framework CoreVideo
   else
     LDFLAGS = -lraylib -lm -lpthread -ldl
   endif
